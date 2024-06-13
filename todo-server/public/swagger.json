@@ -1,0 +1,268 @@
+{
+	"openapi": "3.0.0",
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"taskResponse": {
+				"properties": {
+					"_id": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"isCompleted": {
+						"type": "boolean"
+					},
+					"createdAt": {
+						"type": "string"
+					},
+					"updatedAt": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"_id",
+					"title",
+					"description",
+					"isCompleted"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"getReqTask": {
+				"properties": {
+					"_id": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"_id"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"saveReqTask": {
+				"properties": {
+					"title": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"isCompleted": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"title",
+					"description",
+					"isCompleted"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"updateReqTask": {
+				"properties": {
+					"_id": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"isCompleted": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"_id",
+					"title",
+					"description",
+					"isCompleted"
+				],
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
+		"securitySchemes": {}
+	},
+	"info": {
+		"title": "food-delivery-service",
+		"version": "1.0.0",
+		"license": {
+			"name": "MIT"
+		},
+		"contact": {
+			"name": "Muhammad Hamza"
+		}
+	},
+	"paths": {
+		"/task/getTask": {
+			"post": {
+				"operationId": "GetTask",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/taskResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"task"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/getReqTask"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/task/saveTask": {
+			"post": {
+				"operationId": "SaveTask",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/taskResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"task"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/saveReqTask"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/task/updateTask": {
+			"put": {
+				"operationId": "UpdateTask",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/taskResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"task"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/updateReqTask"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/task/deleteTask/{_id}": {
+			"delete": {
+				"operationId": "DeleteTask",
+				"responses": {
+					"200": {
+						"description": "data deleted",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/taskResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"task"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "_id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/task/getAllTasks": {
+			"get": {
+				"operationId": "GetAllTasks",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/taskResponse"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"task"
+				],
+				"security": [],
+				"parameters": []
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/"
+		}
+	]
+}
