@@ -1,19 +1,39 @@
+// components/Tasks.tsx
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchTasks } from "../redux/taskSlice";
+import { AppDispatch, RootState } from "../redux/store";
 import Task from "./Task";
 import { ITask } from "../interface";
-import { RootState } from "../redux/store";
-import { useSelector } from "react-redux";
 
-export default function Tasks() {
-  const tasks: ITask[] = useSelector((state: RootState) => state.tasks);
+const Tasks = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const tasks = useSelector((state: RootState) => state.tasks.tasks);
+  const loading = useSelector((state: RootState) => state.tasks.loading);
+  const error = useSelector((state: RootState) => state.tasks.error);
+
+  useEffect(() => {
+    dispatch(fetchTasks());
+  }, [dispatch]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
-    <ul role="list" className=" container divide-gray-100">
-      {tasks.length === 0 && (
-        <p className="text-red-600 text-4xl text-center">No Task Found</p>
-      )}
-      {tasks.map((task, index) => (
-        <Task task={task} index={index} key={index} />
-      ))}
-    </ul>
+    <div>
+      <h1>Task List</h1>
+      <ul>
+        {tasks.map((task: ITask, index: number) => (
+          <Task task={task} index={index} key={index} />
+        ))}
+      </ul>
+    </div>
   );
-}
+};
+
+export default Tasks;

@@ -1,14 +1,24 @@
 // taskSlice.ts
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { ITask } from '../interface';
+import { getAll } from '../requests';
 
 interface TasksState {
   tasks: ITask[];
+  loading: boolean;
+  error: string | null;
 }
 
 const initialState: TasksState = {
   tasks: [],
+  loading: false,
+  error: null,
 };
+
+export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async () => {
+  const response = await getAll();
+  return response;
+});
 
 const taskSlice = createSlice({
   name: 'tasks',
@@ -29,6 +39,21 @@ const taskSlice = createSlice({
     getAllTasks: (state, action: PayloadAction<ITask[]>) => {
       state.tasks = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchTasks.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchTasks.fulfilled, (state, action: PayloadAction<ITask[]>) => {
+        state.loading = false;
+        state.tasks = action.payload;
+      })
+      .addCase(fetchTasks.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Failed to fetch tasks';
+      });
   },
 });
 

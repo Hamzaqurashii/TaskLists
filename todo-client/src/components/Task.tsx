@@ -14,7 +14,6 @@ const Task: React.FC<TaskProps> = ({ task, index }) => {
   const dispatch = useDispatch();
   const removeTask = async (id: string) => {
     const data = await delTask(id);
-
     dispatch(deleteTask(data._id));
   };
   const UpdateTask = async (id: string) => {
