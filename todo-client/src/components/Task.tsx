@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { ITask } from "../interface";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { deleteTaskAsync, updateTaskAsync } from "../redux/taskSlice";
@@ -12,6 +12,7 @@ interface TaskProps {
 
 const Task: React.FC<TaskProps> = ({ task, index }) => {
   const dispatch = useDispatch<AppDispatch>();
+  const [selectedId, setSelectedId] = useState("");
   const updateLoading = useSelector(
     (state: RootState) => state.tasks.updateLoading
   );
@@ -47,11 +48,12 @@ const Task: React.FC<TaskProps> = ({ task, index }) => {
           <button className="bg-green-500 h-8 text-xs md:text-lg text-white px-2 py-1 rounded-sm">
             Completed
           </button>
-        ) : updateLoading ? (
+        ) : updateLoading && task._id === selectedId ? (
           <div>Loading</div>
         ) : (
           <button
             onClick={() => {
+              setSelectedId(task._id);
               UpdateTask(task._id);
             }}
             className="bg-yellow-500 h-8 text-xs md:text-lg text-black px-2 py-1 rounded-sm"
@@ -60,11 +62,12 @@ const Task: React.FC<TaskProps> = ({ task, index }) => {
           </button>
         )}
 
-        {deleteLoading ? (
+        {deleteLoading && task._id === selectedId ? (
           <div>loading</div>
         ) : (
           <button
             onClick={() => {
+              setSelectedId(task._id);
               removeTask(task._id);
             }}
             className="bg-red-500 h-8 w-20 flex justify-center text-white px-2 py-1 rounded-sm"
