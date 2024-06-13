@@ -97,7 +97,7 @@
 		"securitySchemes": {}
 	},
 	"info": {
-		"title": "food-delivery-service",
+		"title": "task-list",
 		"version": "1.0.0",
 		"license": {
 			"name": "MIT"

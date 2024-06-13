@@ -1,9 +1,9 @@
 import React from "react";
 import { ITask } from "../interface";
 import { TrashIcon } from "@heroicons/react/24/outline";
-import { delTask, update_task } from "../requests";
-import { deleteTask, updateTask } from "../redux/taskSlice";
-import { useDispatch } from "react-redux";
+import { deleteTaskAsync, updateTaskAsync } from "../redux/taskSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../redux/store";
 
 interface TaskProps {
   task: ITask;
@@ -11,14 +11,19 @@ interface TaskProps {
 }
 
 const Task: React.FC<TaskProps> = ({ task, index }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+  const updateLoading = useSelector(
+    (state: RootState) => state.tasks.updateLoading
+  );
+  const deleteLoading = useSelector(
+    (state: RootState) => state.tasks.deleteLoading
+  );
+  // const error = useSelector((state: RootState) => state.tasks.error);
   const removeTask = async (id: string) => {
-    const data = await delTask(id);
-    dispatch(deleteTask(data._id));
+    dispatch(deleteTaskAsync(id));
   };
   const UpdateTask = async (id: string) => {
-    const data = await update_task(id);
-    dispatch(updateTask(data._id));
+    dispatch(updateTaskAsync(id));
   };
 
   return (
@@ -42,6 +47,8 @@ const Task: React.FC<TaskProps> = ({ task, index }) => {
           <button className="bg-green-500 h-8 text-xs md:text-lg text-white px-2 py-1 rounded-sm">
             Completed
           </button>
+        ) : updateLoading ? (
+          <div>Loading</div>
         ) : (
           <button
             onClick={() => {
@@ -52,14 +59,19 @@ const Task: React.FC<TaskProps> = ({ task, index }) => {
             Mark as completed
           </button>
         )}
-        <button
-          onClick={() => {
-            removeTask(task._id);
-          }}
-          className="bg-red-500 h-8 w-20 flex justify-center text-white px-2 py-1 rounded-sm"
-        >
-          <TrashIcon className="h-6 w-6" aria-hidden="true" />
-        </button>
+
+        {deleteLoading ? (
+          <div>loading</div>
+        ) : (
+          <button
+            onClick={() => {
+              removeTask(task._id);
+            }}
+            className="bg-red-500 h-8 w-20 flex justify-center text-white px-2 py-1 rounded-sm"
+          >
+            <TrashIcon className="h-6 w-6" aria-hidden="true" />
+          </button>
+        )}
       </div>
     </li>
   );

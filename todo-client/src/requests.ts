@@ -24,7 +24,8 @@ export const delTask = async (id: string) => {
     method: "Delete",
   });
   const response = await delete_task.json();
-  return response;
+  console.log(response, "delete response");
+  return JSON.stringify(response);
 };
 export const update_task = async (id: string) => {
   const updte_task = await fetch(`${url}/${endpoint.update}/${id}`, {
@@ -33,5 +34,6 @@ export const update_task = async (id: string) => {
     headers: { "Content-Type": "application/json" },
   });
   const response = await updte_task.json();
+  console.log(response, "update response");
   return response;
 };
