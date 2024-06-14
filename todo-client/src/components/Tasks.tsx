@@ -5,6 +5,7 @@ import { fetchTasks } from "../redux/taskSlice";
 import { AppDispatch, RootState } from "../redux/store";
 import Task from "./Task";
 import { ITask } from "../interface";
+import { Typography } from "@mui/material";
 
 const Tasks = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -26,7 +27,9 @@ const Tasks = () => {
 
   return (
     <div>
-      <h1>Task List</h1>
+      <Typography variant="h3" mt={6} color={"#6F4E37"}>
+        Task List
+      </Typography>
       <ul>
         {tasks.map((task: ITask, index: number) => (
           <Task task={task} index={index} key={index} />

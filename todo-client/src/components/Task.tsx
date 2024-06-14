@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { ITask } from "../interface";
-import { TrashIcon } from "@heroicons/react/24/outline";
+import TrashIcon from "@mui/icons-material/Delete";
 import { deleteTaskAsync, updateTaskAsync } from "../redux/taskSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
+import { Box, List, Button, Typography, IconButton } from "@mui/material";
 
 interface TaskProps {
   task: ITask;
@@ -19,64 +20,120 @@ const Task: React.FC<TaskProps> = ({ task, index }) => {
   const deleteLoading = useSelector(
     (state: RootState) => state.tasks.deleteLoading
   );
-  // const error = useSelector((state: RootState) => state.tasks.error);
+
   const removeTask = async (id: string) => {
     dispatch(deleteTaskAsync(id));
   };
+
   const UpdateTask = async (id: string) => {
     dispatch(updateTaskAsync(id));
   };
 
   return (
-    <li
+    <List
       key={task.description}
-      className="flex flex-col md:flex-row justify-between gap-x-6 py-2"
+      component={"li"}
+      sx={{
+        display: "flex",
+        flexDirection: { xs: "column", md: "row" },
+        justifyContent: "space-between",
+        rowGap: 6,
+        paddingY: 2,
+      }}
     >
-      <div className="flex min-w-0 gap-x-4">
-        <p>{index + 1}</p>
-        <div className="min-w-0 flex-auto">
-          <p className="text-sm font-semibold leading-6 text-gray-900">
+      <Box
+        sx={{
+          display: "flex",
+          columnGap: "1rem",
+          minWidth: 0,
+          flex: "auto",
+        }}
+      >
+        <Typography>{index + 1}</Typography>
+        <Box>
+          <Typography
+            variant="subtitle1"
+            sx={{ fontWeight: "bold", color: "#6F4E37" }}
+          >
             {task.title}
-          </p>
-          <p className="mt-1 truncate text-xs leading-5 text-gray-500">
+          </Typography>
+          <Typography
+            variant="body2"
+            sx={{
+              mt: 1,
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              color: "#A67B5B",
+            }}
+          >
             {task.description}
-          </p>
-        </div>
-      </div>
-      <div className="gap-2 mt-5 flex flex-row sm:items-end">
+          </Typography>
+        </Box>
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          gap: 2,
+          mt: { xs: 5, md: 0 },
+          alignItems: { xs: "start", sm: "center" },
+        }}
+      >
         {task.isCompleted ? (
-          <button className="bg-green-500 h-8 text-xs md:text-lg text-white px-2 py-1 rounded-sm">
+          <Button
+            variant="contained"
+            sx={{
+              bgcolor: "#6F4E37",
+              height: 32,
+              fontSize: { xs: 12, md: 12 },
+              color: "white",
+              px: 2,
+              py: 1,
+              borderRadius: "4px",
+              "&:hover": { backgroundColor: "#A67B5B" },
+            }}
+          >
             Completed
-          </button>
+          </Button>
         ) : updateLoading && task._id === selectedId ? (
-          <div>Loading</div>
+          <Typography>Loading</Typography>
         ) : (
-          <button
+          <Button
             onClick={() => {
               setSelectedId(task._id);
               UpdateTask(task._id);
             }}
-            className="bg-yellow-500 h-8 text-xs md:text-lg text-black px-2 py-1 rounded-sm"
+            variant="contained"
+            sx={{
+              bgcolor: "#6F4E37",
+              "&:hover": { backgroundColor: "#A67B5B" },
+              height: 32,
+              fontSize: { xs: 12, md: 12 },
+              color: "white",
+              px: 2,
+              py: 1,
+              borderRadius: "4px",
+            }}
           >
             Mark as completed
-          </button>
+          </Button>
         )}
 
         {deleteLoading && task._id === selectedId ? (
-          <div>loading</div>
+          <Typography>loading</Typography>
         ) : (
-          <button
+          <IconButton
             onClick={() => {
               setSelectedId(task._id);
               removeTask(task._id);
             }}
-            className="bg-red-500 h-8 w-20 flex justify-center text-white px-2 py-1 rounded-sm"
           >
-            <TrashIcon className="h-6 w-6" aria-hidden="true" />
-          </button>
+            <TrashIcon color="error" className="h-2 w-2" aria-hidden="true" />
+          </IconButton>
         )}
-      </div>
-    </li>
+      </Box>
+    </List>
   );
 };
 
